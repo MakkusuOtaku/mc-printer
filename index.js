@@ -14,7 +14,7 @@ const bot = mineflayer.createBot({
     host: "localhost",
     username: "Machine_0",
     version: "1.16.4",
-    port: 62672,
+    port: 57293,
 });
 
 bot.task = [];
@@ -33,7 +33,8 @@ bot.on('chat', async (username, message)=>{
 
     switch (tokens[0]) {
         case 'draw':
-            let skin = await loadSkin(tokens[1]);
+            let image = await loadImage(tokens[1]);
+
             let palette = [];
 
             for (p of tokens[2].split('+')) {
@@ -43,19 +44,16 @@ bot.on('chat', async (username, message)=>{
             let size = tokens[3].split('x').map(n=>parseInt(n));
 
             buildStructure(
-                skin,
+                image,
                 palette,
                 bot.entity.position.clone(),
                 size,
             );
             break;
     }
-
-    //actions.pathfind(bot, bot.players["Makkusu_Otaku"].entity.position);
 });
 
-async function loadSkin(path, username="MHF_Steve") {
-    //`https://minotar.net/skin/${username}`
+async function loadImage(path) {
     return new Promise(resolve=>{
         getPixels(path, (err, image)=>{
             resolve(image);
@@ -64,9 +62,6 @@ async function loadSkin(path, username="MHF_Steve") {
 }
 
 function getBlock(image, x, z, palette=palettes.concrete) {
-    //return mcdata.blocksByName[palette[0]];
-    //console.log(`XZ:  ${x} ${z}`);
-
     x = Math.floor(image.shape[0]*x);
     z = Math.floor(image.shape[1]*z);
 

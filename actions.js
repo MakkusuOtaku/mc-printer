@@ -2,7 +2,6 @@ const mcdata = require("minecraft-data")('1.16.4');
 const Item = require('prismarine-item')('1.16.4')
 const pathfinder = require("./pathfinder.js");
 const vec3 = require('vec3');
-const mcfinder = require('./mc-finder.js');
 
 function sleep(time) {
     return new Promise(resolve=>setTimeout(resolve, time));
@@ -86,28 +85,6 @@ const placeBlock = async (bot, position, type="dirt")=>{
     bot.task.pop();
 };
 
-const getItem = async (bot, item)=>{
-    bot.task.push("get item");
-
-    let sourceBlocks = mcfinder.blocks(item).map(block=>{
-        return mcdata.blocksByName[block].id;
-    });
-
-    let blocks = bot.findBlocks({
-        matching: sourceBlocks
-    });
-
-    bot.chat(`Blocks: ${blocks.length}`);
-    bot.chat(`Entities: ${0}`);
-
-    if (blocks.length) {
-        await clearBlock(bot, blocks[0]);
-    }
-
-    bot.task.pop();
-}
-
 exports.pathfind = pathfind;
 exports.clearBlock = clearBlock;
 exports.placeBlock = placeBlock;
-exports.getItem = getItem;
