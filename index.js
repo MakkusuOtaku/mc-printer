@@ -14,7 +14,7 @@ const bot = mineflayer.createBot({
     host: "localhost",
     username: "Machine_0",
     version: "1.16.4",
-    port: 57293,
+    port: 55218,
 });
 
 bot.task = [];
@@ -24,7 +24,7 @@ bot.once('spawn', ()=>{
 
     bot.chat("Ready to work.");
     bot.chat(`Gamemode: ${bot.game.gameMode}`);
-});
+})
 
 bot.on('chat', async (username, message)=>{
     if (username != "Makkusu_Otaku") return;
@@ -69,16 +69,6 @@ function getBlock(image, x, z, palette=palettes.concrete) {
     let g = image.get(x, z, 1);
     let b = image.get(x, z, 2);
 
-    /*
-    let colA = palette[0].colour;
-    let colB = palette[1].colour;
-    let disA = Math.hypot(r-colA[0], g-colA[1], b-colA[2]);
-    let disB = Math.hypot(r-colB[0], g-colB[1], b-colB[2]);
-    console.log(`RGB: ${r} ${g} ${b}`);
-    //console.log(`Distance: ${disA} ${disB}`);
-    console.log(`Block: ${disA < disB? palette[0].block : palette[1].block}`);
-    */
-
     let best = palette[0];
 
     for (i in palette) {
@@ -94,6 +84,7 @@ function getBlock(image, x, z, palette=palettes.concrete) {
 }
 
 async function buildStructure(texture, palette, startPosition=bot.entity.position.clone(), size=[64, 64]) {
+    bot.task.push("draw");
     startPosition = startPosition.offset(1, 0, 1);
 
     let zD = 1;
@@ -108,4 +99,10 @@ async function buildStructure(texture, palette, startPosition=bot.entity.positio
         zD = -zD;
         z += zD;
     }
+    bot.task.pop();
 }
+
+setInterval(()=>{
+    console.clear();
+    console.log(bot.task.join(' > '));
+}, 200);
