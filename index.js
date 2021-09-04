@@ -14,7 +14,7 @@ const bot = mineflayer.createBot({
     host: "localhost",
     username: "Machine_0",
     version: "1.16.4",
-    port: 55218,
+    port: 57245,
 });
 
 bot.task = [];
@@ -80,12 +80,12 @@ function getBlock(image, x, z, palette=palettes.concrete) {
         best = disA < disB? best : palette[i];
     }
 
-    if (image.shape[3] == 4) {
+    if (image.shape[2] == 4) {
         let alpha = image.get(x, z, 3);
 
-        if (alpha == 0) {
+        if (alpha <= 64) {
             best = {block:null};
-        } else if (alpha < 128) {
+        } else if (alpha <= 128) {
             let best = palettes.glass[0];
 
             for (i in palettes.glass) {
@@ -111,8 +111,11 @@ async function buildStructure(texture, palette, startPosition=bot.entity.positio
 
     for (let x = 0; x < size[0]; x++) {
         while (z < size[1] && z > -1) {
+
             let block = getBlock(texture, x/size[0], z/size[1], palette);
+            
             if (block) await actions.placeBlock(bot, startPosition.offset(x, 0, z), block);
+            else await actions.clearBlock(bot, startPosition.offset(x, 0, z), block);
             z += zD;
         }
         zD = -zD;
