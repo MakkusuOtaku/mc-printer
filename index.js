@@ -112,7 +112,7 @@ async function buildStructure(texture, palette, startPosition=bot.entity.positio
     for (let x = 0; x < size[0]; x++) {
         while (z < size[1] && z > -1) {
             let block = getBlock(texture, x/size[0], z/size[1], palette);
-            await actions.placeBlock(bot, startPosition.offset(x, 0, z), block);
+            if (block) await actions.placeBlock(bot, startPosition.offset(x, 0, z), block);
             z += zD;
         }
         zD = -zD;
