@@ -14,7 +14,7 @@ const bot = mineflayer.createBot({
     host: "localhost",
     username: "Machine_0",
     version: "1.16.4",
-    port: 57245,
+    port: 63210,
 });
 
 bot.task = [];
@@ -24,10 +24,11 @@ bot.once('spawn', ()=>{
 
     bot.chat("Ready to work.");
     bot.chat(`Gamemode: ${bot.game.gameMode}`);
-})
+});
 
 bot.on('chat', async (username, message)=>{
     if (username != "Makkusu_Otaku") return;
+    console.log(message);
 
     let tokens = message.split(' ');
 
@@ -109,15 +110,25 @@ async function buildStructure(texture, palette, startPosition=bot.entity.positio
     let zD = 1;
     let z = 0;
 
-    for (let x = 0; x < size[0]; x++) {
+    for (let x = 0; x < size[0]; x += settings.chunkSize) {
         while (z < size[1] && z > -1) {
 
-            let block = getBlock(texture, x/size[0], z/size[1], palette);
+            for (xx = 0; xx < settings.chunkSize && x+xx < size[0]; xx++) {
+                let k = x+xx;
+
+                let block = getBlock(texture, k/size[0], z/size[1], palette);
             
-            if (block) await actions.placeBlock(bot, startPosition.offset(x, 0, z), block);
-            else await actions.clearBlock(bot, startPosition.offset(x, 0, z), block);
+                if (settings.commands) {
+                    let pos = startPosition.offset(k, 0, z).floor();
+                    bot.chat(`/setblock ${pos.x} ${pos.y} ${pos.z} ${block}`);
+                } else {
+                    if (block) await actions.placeBlock(bot, startPosition.offset(k, 0, z), block);
+                    else await actions.clearBlock(bot, startPosition.offset(k, 0, z), block);
+                }
+            }
             z += zD;
         }
+        await actions.sleep(500);
         zD = -zD;
         z += zD;
     }
