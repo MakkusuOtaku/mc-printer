@@ -80,6 +80,25 @@ function getBlock(image, x, z, palette=palettes.concrete) {
         best = disA < disB? best : palette[i];
     }
 
+    if (image.shape[3] == 4) {
+        let alpha = image.get(x, z, 3);
+
+        if (alpha == 0) {
+            best = {block:null};
+        } else if (alpha < 128) {
+            let best = palettes.glass[0];
+
+            for (i in palettes.glass) {
+                let colA = best.colour;
+                let colB = palettes.glass[i].colour;
+                let disA = colourDistances.rgb(r, g, b, colA[0], colA[1], colA[2]);
+                let disB = colourDistances.rgb(r, g, b, colB[0], colB[1], colB[2]);
+                
+                best = disA < disB? best : palettes.glass[i];
+            }
+        }
+    }
+
     return best.block;
 }
 
