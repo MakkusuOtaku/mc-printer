@@ -30,6 +30,24 @@
         {"block": "red_concrete", "colour": [143, 34, 34]},
         {"block": "black_concrete", "colour": [9, 11, 16]}
     ],
+    "glass": [
+        {"block": "white_stained_glass", "colour": [208, 214, 215]},
+        {"block": "orange_stained_glass", "colour": [225, 98, 1]},
+        {"block": "magenta_stained_glass", "colour": [169, 48, 159]},
+        {"block": "light_blue_stained_glass", "colour": [36, 138, 200]},
+        {"block": "yellow_stained_glass", "colour": [242, 176, 21]},
+        {"block": "lime_stained_glass", "colour": [93, 168, 24]},
+        {"block": "pink_stained_glass", "colour": [214, 101, 143]},
+        {"block": "gray_stained_glass", "colour": [55, 58, 62]},
+        {"block": "light_gray_stained_glass", "colour": [126, 126, 116]},
+        {"block": "cyan_stained_glass", "colour": [22, 120, 137]},
+        {"block": "purple_stained_glass", "colour": [101, 32, 157]},
+        {"block": "blue_stained_glass", "colour": [44, 46, 142]},
+        {"block": "brown_stained_glass", "colour": [96, 59, 31]},
+        {"block": "green_stained_glass", "colour": [73, 91, 36]},
+        {"block": "red_stained_glass", "colour": [143, 34, 34]},
+        {"block": "black_stained_glass", "colour": [9, 11, 16]}
+    ],
     "planks-binary": [
         {"block": "oak_planks", "colour": [255, 255, 255]},
         {"block": "dark_oak_planks", "colour": [0, 0, 0]}

@@ -32,7 +32,9 @@ const pathfind = async (bot, position, range=1)=>{
 const clearBlock = async (bot, position)=>{
     bot.task.push("clear block");
 
-    await pathfind(bot, position, 4);
+    if (bot.entity.position.distanceTo(position) > 4) {
+        await pathfind(bot, position, 4);
+    }
 
     let block = bot.blockAt(position);
 
@@ -72,12 +74,12 @@ const equip = async (bot, item, slot='hand')=>{
 const placeBlock = async (bot, position, type="dirt")=>{
     bot.task.push("place block");
 
-    await pathfind(bot, position, 4);
-
     await clearBlock(bot, position).catch(console.log);
 
     //let itemType = mcdata.itemsByName[type].id;
     await equip(bot, type);//bot.equip(itemType, 'hand');
+
+    await pathfind(bot, position, 4);
 
     let referenceBlock = bot.blockAt(position.offset(0, -1, 0), false);
     await bot.placeBlock(referenceBlock, vec3(0, 1, 0)).catch(console.log);

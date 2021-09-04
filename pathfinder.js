@@ -58,6 +58,12 @@ function pathfind(bot, start, end, range=1, maxLoops=300) {
     let initDist = start.distanceTo(end);
     let loops = 0;
 
+    start = vec3(
+        Math.floor(start.x)+0.5,
+        Math.floor(start.y),
+        Math.floor(start.z)+0.5
+    );
+
     openList.push({
         position: start,
         g: 0,
