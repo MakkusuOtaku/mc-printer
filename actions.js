@@ -7,6 +7,11 @@ function sleep(time) {
     return new Promise(resolve=>setTimeout(resolve, time));
 }
 
+const checkOP = async (bot)=>{
+    let matches = await bot.tabComplete("/setblo");
+    return !!matches.length;
+};
+
 const pathfind = async (bot, position, range=1)=>{
     bot.task.push("pathfind");
 
@@ -32,7 +37,7 @@ const pathfind = async (bot, position, range=1)=>{
 const clearBlock = async (bot, position)=>{
     bot.task.push("clear block");
 
-    if (bot.entity.position.distanceTo(position) > 4) {
+    if (bot.entity.position.distanceTo(position) > 5) {
         await pathfind(bot, position, 4);
     }
 
@@ -79,7 +84,9 @@ const placeBlock = async (bot, position, type="dirt")=>{
     //let itemType = mcdata.itemsByName[type].id;
     await equip(bot, type);//bot.equip(itemType, 'hand');
 
-    await pathfind(bot, position, 4);
+    if (bot.entity.position.distanceTo(position) > 5) {
+        await pathfind(bot, position, 4);
+    }
 
     let referenceBlock = bot.blockAt(position.offset(0, -1, 0), false);
     await bot.placeBlock(referenceBlock, vec3(0, 1, 0)).catch(console.log);
@@ -87,6 +94,8 @@ const placeBlock = async (bot, position, type="dirt")=>{
     bot.task.pop();
 };
 
+exports.sleep = sleep;
+exports.checkOP = checkOP;
 exports.pathfind = pathfind;
 exports.clearBlock = clearBlock;
 exports.placeBlock = placeBlock;

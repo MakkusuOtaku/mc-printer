@@ -52,7 +52,7 @@ function gridWalk(bot, goal) {
     }
 }
 
-function pathfind(bot, start, end, range=1, maxLoops=300) {
+function pathfind(bot, start, end, range=1, maxLoops=100) {
     let openList = [];
     let closedList = [];
     let initDist = start.distanceTo(end);
