@@ -2,6 +2,11 @@ const mcdata = require("minecraft-data")('1.16.4');
 const Item = require('prismarine-item')('1.16.4')
 const pathfinder = require("./pathfinder.js");
 const vec3 = require('vec3');
+const fs = require('fs');
+
+const woolBlocks = fs.readFileSync('wool-blocks.txt', 'utf8').split('\r\n');
+
+console.log(woolBlocks);
 
 function sleep(time) {
     return new Promise(resolve=>setTimeout(resolve, time));
@@ -34,8 +39,52 @@ const pathfind = async (bot, position, range=1)=>{
     bot.task.pop();
 };
 
+var lastSheep;
+
+const getWool = async (bot, block)=>{
+    bot.task.push("collect wool");
+    let index = woolBlocks.indexOf(block);
+
+    if (!lastSheep) {
+        let sheep = bot.nearestEntity((entity)=>{
+            return entity.name == 'sheep';
+        });
+        if (sheep) lastSheep = sheep.position;
+    }
+
+    if (lastSheep) await pathfind(bot, lastSheep, 4);
+
+    let sheep = bot.nearestEntity((entity)=>{
+        return entity.name == 'sheep' && entity.metadata[16] == index;
+    });
+
+    if (sheep) {
+        lastSheep = sheep.position;
+
+        await pathfind(bot, sheep.position, 2);
+        equip(bot, 'shears');
+        await bot.activateEntity(sheep);
+
+        await sleep(1000);
+
+        let wool = bot.nearestEntity((entity)=>{
+            return entity.name == 'item';
+        });
+
+        for (let loops = 0; loops < 5 && wool; loops++) {
+            await pathfind(bot, wool.position.clone(), 1.2);
+
+            wool = bot.nearestEntity((entity)=>{
+                return entity.name == 'item';
+            });
+        }
+    }
+    else console.log(`Can't find sheep for ${block}.`);
+    bot.task.pop();
+};
+
 const clearBlock = async (bot, position)=>{
-    bot.task.push("clear block");
+    bot.task.push("clear");
 
     if (bot.entity.position.distanceTo(position) > 5) {
         await pathfind(bot, position, 4);
@@ -60,7 +109,7 @@ function checkInventory(bot, itemName) {
 }
 
 const equip = async (bot, item, slot='hand')=>{
-    bot.task.push("place block");
+    bot.task.push("equip");
 
     let itemType = mcdata.itemsByName[item].id;
 
@@ -68,7 +117,11 @@ const equip = async (bot, item, slot='hand')=>{
         if (bot.game.gameMode == 'creative') {
             await bot.creative.setInventorySlot(36, new Item(itemType, 1));
         } else {
-            console.log("Can't get item.");
+            if (item.endsWith('_wool')) {
+                await getWool(bot, item);
+            } else {
+                console.log("Can't get item.");
+            }
         }
     }
 
@@ -77,7 +130,7 @@ const equip = async (bot, item, slot='hand')=>{
 };
 
 const placeBlock = async (bot, position, type="dirt")=>{
-    bot.task.push("place block");
+    bot.task.push("place");
 
     await clearBlock(bot, position).catch(console.log);
 
@@ -96,6 +149,7 @@ const placeBlock = async (bot, position, type="dirt")=>{
 
 exports.sleep = sleep;
 exports.checkOP = checkOP;
+exports.getWool = getWool;
 exports.pathfind = pathfind;
 exports.clearBlock = clearBlock;
 exports.placeBlock = placeBlock;

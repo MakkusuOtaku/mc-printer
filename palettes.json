@@ -76,5 +76,23 @@
         {"block": "red_terracotta", "colour": [142, 60, 46]},
         {"block": "black_terracotta", "colour": [37, 22, 16]},
         {"block": "terracotta", "colour": [149, 91, 66]}
+    ],
+    "wool": [
+        {"block": "white_wool", "colour": [222, 226, 227]},
+        {"block": "orange_wool", "colour": [235, 107, 10]},
+        {"block": "magenta_wool", "colour": [180, 59, 170]},
+        {"block": "light_blue_wool", "colour": [48, 162, 210]},
+        {"block": "yellow_wool", "colour": [246, 188, 30]},
+        {"block": "lime_wool", "colour": [103, 177, 24]},
+        {"block": "pink_wool", "colour": [243, 124, 159]},
+        {"block": "gray_wool", "colour": [59, 63, 66]},
+        {"block": "light_gray_wool", "colour": [134, 134, 126]},
+        {"block": "cyan_wool", "colour": [21, 129, 141]},
+        {"block": "purple_wool", "colour": [111, 36, 164]},
+        {"block": "blue_wool", "colour": [49, 51, 150]},
+        {"block": "brown_wool", "colour": [106, 66, 36]},
+        {"block": "green_wool", "colour": [79, 101, 31]},
+        {"block": "red_wool", "colour": [152, 35, 33]},
+        {"block": "black_wool", "colour": [14, 15, 20]}
     ]
 }
