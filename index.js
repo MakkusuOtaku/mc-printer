@@ -14,7 +14,7 @@ const bot = mineflayer.createBot({
     host: "localhost",
     username: "Machine_0",
     version: "1.16.4",
-    port: 53294,
+    port: 60396,
 });
 
 bot.task = [];
