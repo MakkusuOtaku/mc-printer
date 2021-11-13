@@ -1,2 +1,2 @@
-umaru.png
-shrek.png
+*.png
+!examples/*.png

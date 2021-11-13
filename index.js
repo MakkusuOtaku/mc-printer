@@ -14,7 +14,7 @@ const bot = mineflayer.createBot({
     host: "localhost",
     username: "Machine_0",
     version: "1.16.4",
-    port: 63210,
+    port: 60396,
 });
 
 bot.task = [];
@@ -50,6 +50,9 @@ bot.on('chat', async (username, message)=>{
                 bot.entity.position.clone(),
                 size,
             );
+            break;
+        case 'sheep':
+            actions.getWool(bot, tokens[1]);
             break;
     }
 });
