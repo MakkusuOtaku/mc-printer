@@ -1,5 +1,10 @@
 {
     "boss": "Makkusu_Otaku",
     "chunkSize": 4,
-    "commands": false
+    "commands": true,
+    "lastJoin": {
+        "server": "localhost",
+        "port": 0
+    },
+    "mode": "LAB"
 }

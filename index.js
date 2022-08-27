@@ -4,45 +4,63 @@ const vec3 = require('vec3');
 const getPixels = require('get-pixels');
 const fs = require('fs');
 const colourDistances = require('./colour-distances.js');
-
-var mcdata;
+const antiColor = require('./antimatter-color.js');
 
 const settings = JSON.parse(fs.readFileSync('settings.json', 'utf8'));
 const palettes = JSON.parse(fs.readFileSync('palettes.json', 'utf8'));
 
-const bot = mineflayer.createBot({
-    host: "localhost",
-    username: "Machine_0",
-    version: "1.16.4",
-    port: 60396,
+const COLOR = {
+    cyan: '\x1b[36m%s\x1b[0m',
+    green: '\x1b[32m%s\x1b[0m',
+    red: '\x1b[31m%s\x1b[0m',
+    yellow: '\x1b[33m%s\x1b[0m'
+};
+
+const banner = `
+    ███    ███  ██████       ██████  ██████  ██ ███    ██ ████████ ███████ ██████  
+    ████  ████ ██            ██   ██ ██   ██ ██ ████   ██    ██    ██      ██   ██ 
+    ██ ████ ██ ██      █████ ██████  ██████  ██ ██ ██  ██    ██    █████   ██████  
+    ██  ██  ██ ██            ██      ██   ██ ██ ██  ██ ██    ██    ██      ██   ██ 
+    ██      ██  ██████       ██      ██   ██ ██ ██   ████    ██    ███████ ██   ██ 
+`;
+
+let bot, mcdata;
+
+console.clear();
+console.log(COLOR.cyan, banner);
+
+const readline = require("readline");
+
+const reader = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
 });
 
-bot.task = [];
+function saveSettings() {
+    let data = JSON.stringify(settings, null, 4);
+    fs.writeFileSync('settings.json', data);
+}
 
-bot.once('spawn', ()=>{
-    mcdata = require('minecraft-data')(bot.version);
+async function runCommand(command) {
+    const args = command.split(' ');
 
-    bot.chat("Ready to work.");
-    bot.chat(`Gamemode: ${bot.game.gameMode}`);
-});
-
-bot.on('chat', async (username, message)=>{
-    if (username != "Makkusu_Otaku") return;
-    console.log(message);
-
-    let tokens = message.split(' ');
-
-    switch (tokens[0]) {
+    switch(args[0]) {
         case 'draw':
-            let image = await loadImage(tokens[1]);
+            console.log("Drawing an image!");
+            let image = await loadImage(args[1]);
 
             let palette = [];
 
-            for (p of tokens[2].split('+')) {
+            for (p of args[2].split('+')) {
                 palette.push(...palettes[p]);
             }
 
-            let size = tokens[3].split('x').map(n=>parseInt(n));
+            let size = args[3].split('x').map(n=>parseInt(n));
+
+            if (size.length === 1) {
+                let scale = size[0]/image.shape[0];
+                size.push(Math.round(image.shape[1]*scale));
+            }
 
             buildStructure(
                 image,
@@ -51,11 +69,85 @@ bot.on('chat', async (username, message)=>{
                 size,
             );
             break;
-        case 'sheep':
-            actions.getWool(bot, tokens[1]);
+        case 'join':
+            console.log("Joining server!");
+            if (args.length === 3) {
+                joinServer(args[1], parseInt(args[2]));
+            } else if (args.length === 2) {
+                joinServer("localhost", parseInt(args[1]));
+            }
             break;
+        case 'mode':
+            if (args.length === 1) {
+                console.log(`Color mode is ${settings.mode}.`);
+                break;
+            }
+            if (args[1].toLowerCase() === "rgb") settings.mode = "RGB";
+            else if (args[1].toLowerCase() === "lab") settings.mode = "LAB";
+            else {
+                console.log(COLOR.red, "Unknown color mode.");
+            }
+            saveSettings();
+            break;
+        case 'rejoin':
+            joinServer(settings.lastJoin.server, parseInt(settings.lastJoin.port));
+            break;
+        case 'rot':
+            console.log(COLOR.green, "Rotating!!!");
+            break;
+        case 'sheep':
+            console.log("Sheeping!");
+            actions.getWool(bot, args[1]);
+            break;
+        default:
+            console.log("Unknown command.");
     }
-});
+}
+
+function inputLoop(command) {
+    if (command) runCommand(command);
+    reader.question(">", inputLoop);
+}
+
+inputLoop();
+
+function joinServer(server="localhost", portNumber) {
+    console.log(`Creating bot on "${server}" at ${portNumber}.`);
+
+    settings.lastJoin = {
+        server: server,
+        port: portNumber,
+    };
+
+    saveSettings();
+
+    bot = mineflayer.createBot({
+        host: server,
+        username: "PrinterBot",
+        port: portNumber,
+    });
+
+    bot.on('kicked', (reason)=>{
+        console.log(COLOR.red, reason);
+    });
+
+    bot.on('error', (error)=>{
+        console.log(COLOR.yellow, error);
+    });
+
+    bot.task = [];
+
+    bot.once('spawn', ()=>{
+        console.log(COLOR.green, "Joined server.");
+        mcdata = require('minecraft-data')(bot.version);
+        bot.chat("I'm a happy little robot.");
+    });
+
+    bot.on('chat', (username, message)=>{
+        if (username != "Makkusu_Otaku") return;
+        runCommand(message);
+    });
+}
 
 async function loadImage(path) {
     return new Promise(resolve=>{
@@ -76,12 +168,23 @@ function getBlock(image, x, z, palette=palettes.concrete) {
     let best = palette[0];
 
     for (i in palette) {
-        let colA = best.colour;
-        let colB = palette[i].colour;
-        let disA = colourDistances.rgb(r, g, b, colA[0], colA[1], colA[2]);
-        let disB = colourDistances.rgb(r, g, b, colB[0], colB[1], colB[2]);
-        
-        best = disA < disB? best : palette[i];
+
+        if (mode === "LAB") {
+            let sourceColor = antiColor.rgb2lab([r, g, b]);
+            let colA = antiColor.rgb2lab(best.colour);
+            let colB = antiColor.rgb2lab(palette[i].colour);
+            let disA = antiColor.deltaE(sourceColor, colA);
+            let disB = antiColor.deltaE(sourceColor, colB);
+            
+            best = disA < disB? best : palette[i];
+        } else if (mode === "RGB") {
+            let colA = best.colour;
+            let colB = palette[i].colour;
+            let disA = colourDistances.rgb(r, g, b, colA[0], colA[1], colA[2]);
+            let disB = colourDistances.rgb(r, g, b, colB[0], colB[1], colB[2]);
+
+            best = disA < disB? best : palette[i];
+        }
     }
 
     if (image.shape[2] == 4) {
@@ -137,8 +240,3 @@ async function buildStructure(texture, palette, startPosition=bot.entity.positio
     }
     bot.task.pop();
 }
-
-setInterval(()=>{
-    console.clear();
-    console.log(bot.task.join(' > '));
-}, 200);

@@ -6,8 +6,6 @@ const fs = require('fs');
 
 const woolBlocks = fs.readFileSync('wool-blocks.txt', 'utf8').split('\r\n');
 
-console.log(woolBlocks);
-
 function sleep(time) {
     return new Promise(resolve=>setTimeout(resolve, time));
 }
