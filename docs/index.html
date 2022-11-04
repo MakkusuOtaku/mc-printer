@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+        <meta name='viewport' content='width=device-width, initial-scale=1'>
+        <meta name='description' content='A procedural house generator for Minecraft.'>
+        <meta name='author' content='Makkusu Otaku'>
+        <link rel="icon" href="icon.png">
+        <title>mc-printer</title>
+        <link rel='stylesheet' type='text/css' media='screen' href='style.css'>
+    </head>
+    <body>
+        <!--button id="help">?</button-->
+        <h1>Printer Bot</h1>
+        <div id="container">
+            <div id="canvas-container">
+                <label id="uploadLabel">
+                    Upload Image
+                    <input type="file">
+                </label>
+                <canvas></canvas>
+            </div>
+            <div id="controls">
+                <input id="resolution" type="range" min=3 max=8 step=0.2>
+
+                <!--select name="cars" id="cars">
+                    <option value="all">All</option>
+                    <option value="concrete">Concrete</option>
+                    <option value="wool">Wool</option>
+                    <option value="terracotta">Terracotta</option>
+                </select-->
+
+                <div id="color">
+                    <button>Average</button>
+                    <button>Dominant</button>
+                </div>
+                <div id="spaces">
+                    <button>RGB</button>
+                    <button>LAB</button>
+                </div>
+            </div>
+        </div>
+        <div id="command-container">
+            <h2>Commands</h2>
+            <div>
+                <div class="command-example">
+                    <span>chunk</span> 4
+                </div>
+            </div>
+            <div>
+                <div class="command-example">
+                    <span>clear</span>
+                </div>
+            </div>
+            <div>
+                <div class="command-example">
+                    <span>color</span> average
+                </div>
+            </div>
+            <div>
+                <div class="command-example">
+                    <span>commands</span> on
+                </div>
+            </div>
+            <div>
+                <div class="command-example">
+                    <span>draw</span> image.png all 640x360
+                </div>
+            </div>
+            <div>
+                <div class="command-example">
+                    <span>join</span> localhost 12345
+                </div>
+                <div class="command-description">
+                    Join the server hypixel.net on port 8080.
+                </div>
+            </div>
+            <div>
+                <div class="command-example">
+                    <span>mode</span> rgb
+                </div>
+            </div>
+            <div>
+                <div class="command-example">
+                    <span>rejoin</span>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" src="script.js"></script>
+    </body>
+</html>
