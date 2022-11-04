@@ -1,0 +1,26 @@
+{
+  "name": "mc-printer",
+  "version": "1.0.0",
+  "description": "Minecraft Bot that prints images with blocks.",
+  "main": "index.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MakkusuOtaku/mc-printer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MakkusuOtaku/mc-printer/issues"
+  },
+  "homepage": "https://github.com/MakkusuOtaku/mc-printer#readme",
+  "dependencies": {
+    "get-pixels": "^3.3.3",
+    "mineflayer": "^4.4.0"
+  }
+}

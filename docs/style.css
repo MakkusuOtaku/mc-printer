@@ -1,0 +1,140 @@
+body {
+    background: #fff;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+}
+
+#help {
+    position: absolute;
+    top: 1em;
+    right: 1em;
+    width: 3em;
+    height: 3em;
+
+    background: blue;
+    border: none;
+    border-radius: 100%;
+    color: white;
+    font-weight: bold;
+    box-shadow: inset -5px -5px 2px darkblue;
+}
+
+h1, h2 {
+    width: 100%;
+    text-align: center;
+}
+
+#container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap:  1em;
+    margin: 1em;
+}
+
+#canvas-container {
+    position: relative;
+    background: green;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1;
+}
+
+canvas {
+    background: green;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1;
+    image-rendering: pixelated;
+}
+
+#uploadLabel {
+    position: absolute;
+    opacity: 0;
+
+    border: 1px solid crimson;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1;
+    cursor: pointer;
+    user-select: none;
+
+    font-family: monospace;
+    color: crimson;
+}
+
+#uploadLabel>input {
+    display: none;
+}
+
+#controls {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+#resolution {
+    width: 100%;
+}
+
+#spaces, #color {
+    display: flex;
+    gap: 1em;
+}
+
+#spaces>button, #color>button {
+    width: 100%;
+    padding: 0.5em;
+    border: 2px solid lightgray;
+    border-radius: 5px;
+}
+
+#spaces>button:hover, #color>button:hover {
+    background: linear-gradient(45deg, #00F, #F0F);
+}
+
+#command-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    padding: 1em;
+}
+
+.command-example {
+    background: #222;
+    color: grey;
+    padding: 0.5em;
+    border-radius: 5px;
+    box-shadow: inset 2px 2px 5px black;
+    word-spacing: 2px;
+}
+
+.command-example>span {
+    font-weight: bold;
+}
+
+.command-description {
+    display: none;
+    padding: 0.5em;
+}
+
+@media screen and (min-width: 600px) {
+    #container {
+        flex-direction: row;
+        margin: 2em;
+        height: 80vh;
+    }
+
+    #canvas-container {
+        width: auto;
+    }
+
+    canvas {
+        width: auto;
+    }
+}
