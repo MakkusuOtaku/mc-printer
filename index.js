@@ -3,8 +3,9 @@ const actions = require("./actions.js");
 const vec3 = require('vec3');
 const getPixels = require('get-pixels');
 const fs = require('fs');
-const colourDistances = require('./colour-distances.js');
-const antiColor = require('./antimatter-color.js');
+
+const mcColor = require('./mc-colors.js');
+const { buildModel } = require('./model-builder.js');
 
 const settings = JSON.parse(fs.readFileSync('settings.json', 'utf8'));
 const palettes = JSON.parse(fs.readFileSync('palettes.json', 'utf8'));
@@ -27,6 +28,7 @@ const banner = `
 `;
 
 let bot, mcdata;
+
 let printData = {
     isPrinting: false,
     progress: 0,
@@ -59,21 +61,33 @@ printData.bar = createBar(printData.progress*20);
 function display() {
     console.clear();
     console.log(COLOR.cyan, banner);
+
     if (bot && bot.game && bot.game.gameMode === "survival") {
         console.log(COLOR.red, `Health: ${healthBar}`);
         console.log(COLOR.yellow, `Hunger: ${foodBar}`);
     }
+
     if (printData.isPrinting) {
         console.log(`Printed: ${printData.bar}`);
-        //console.log(`Printing: ${printData.progress*100}%`);
     }
+
     for (line of log) {
         console.log(...line);
     }
+
     process.stdout.write(reader._prompt+reader.line);
 }
 
 setInterval(display, 100);
+
+function getSetting(key) {
+    return settings[key];
+}
+
+function setSetting(key, value) {
+    settings[key] = value;
+    saveSettings();
+}
 
 function saveSettings() {
     let data = JSON.stringify(settings, null, 4);
@@ -85,12 +99,6 @@ async function drawImage(args) {
 
     let image = await loadImage(args[1]);
 
-    let palette = [];
-
-    for (p of args[2].split('+')) {
-        palette.push(...palettes[p]);
-    }
-
     let size = args[3].split('x').map(n=>parseInt(n));
 
     if (size.length === 1) {
@@ -100,40 +108,27 @@ async function drawImage(args) {
 
     buildImage(
         image,
-        palette,
+        palette=args[2],
         bot.entity.position.clone(),
         size,
     );
 }
 
-async function runCommand(command) {
-    const args = command.split(' ');
+const commands = {};
+
+async function runCommand(commandText) {
+    const args = commandText.split(' ');
+
+    let command = commands[args[0]];
+
+    if (command) {
+        await command(args);
+        return;
+    }
+
+    //addLog(`Command "${args[0]}" not found.`, COLOR.red);
 
     switch(args[0]) {
-        case 'chunk':
-            if (args.length === 1) {
-                addLog(`Chunk size is ${settings.chunkSize}.`);
-                break;
-            }
-            settings.chunkSize = parseInt(args[1]);
-            addLog(`Chunk size set to ${settings.chunkSize}.`);
-            saveSettings();
-            break;
-        case 'clear':
-            log = [];
-            break;
-        case 'color':
-            if (args.length === 1) {
-                addLog(`Using the ${settings.color} color of blocks.`);
-                break;
-            }
-            if (args[1].toLowerCase() === "average") settings.color = "average";
-            else if (args[1].toLowerCase() === "dominant") settings.color = "dominant";
-            else {
-                addLog("Invalid source color. (source color? Idk what to call it lmao)", COLOR.yellow);
-            }
-            saveSettings();
-            break;
         case 'commands':
             if (args.length === 1) {
                 addLog(`Commands are ${settings.commands? 'enabled': 'disabled'}.`);
@@ -204,8 +199,56 @@ async function runCommand(command) {
             actions.getWool(bot, args[1]);
             break;
         default:
-            addLog(`Unknown command.`);
+            addLog(`Command "${args[0]}" not found.`, COLOR.red);
     }
+}
+
+commands.chunk = async (arguments)=>{
+    if (arguments.length === 1) {
+        addLog(`Chunk size is ${settings.chunkSize}.`);
+        return;
+    }
+    settings.chunkSize = parseInt(arguments[1]);
+    addLog(`Chunk size set to ${settings.chunkSize}.`);
+    saveSettings();
+};
+
+commands.clear = async ()=>{
+    log = [];
+};
+
+commands.color = async (arguments)=>{
+    if (arguments.length === 1) {
+        addLog(`Using the ${settings.color} color of blocks.`);
+        return;
+    }
+    if (arguments[1].toLowerCase() === "average") settings.color = "average";
+    else if (arguments[1].toLowerCase() === "dominant") settings.color = "dominant";
+    else {
+        addLog("Invalid source color. (source color? Idk what to call it lmao)", COLOR.yellow);
+    }
+    saveSettings();
+};
+
+commands.model = async (arguments)=>{
+    /*if (arguments.length === 0) {
+        // Open menu
+    }*/
+
+    const modelPath = arguments[1];
+    const textureLocation = arguments[2];
+    const modelSize = parseInt(arguments[3]) || 20;
+
+    addLog("Building model....", COLOR.green);
+
+    await buildModel(bot, {
+        path: modelPath,
+        textureLocation: textureLocation,
+        position: bot.entity.position,
+        size: modelSize,
+    });
+
+    addLog("Model has been built.", COLOR.green);
 }
 
 function inputLoop(command) {
@@ -247,13 +290,19 @@ function joinServer(server="localhost", portNumber) {
     bot.task = [];
 
     bot.once('spawn', ()=>{
-        addLog("Joined server.", COLOR.green);
         mcdata = require('minecraft-data')(bot.version);
+
+        bot.settings = settings;
+
+        bot.loadPlugin(mcColor);
+        bot.palettes = palettes;
+
+        addLog("Joined server.", COLOR.green);
         bot.chat("I'm a happy little robot.");
     });
 
     bot.on('chat', (username, message)=>{
-        if (username != "Makkusu_Otaku") return;
+        if (!settings.bosses.includes(username)) return;
         runCommand(message);
     });
 }
@@ -267,7 +316,7 @@ async function loadImage(path) {
 }
 
 function getBlock(image, x, z, palette=palettes.concrete, gif=false, t=1) {
-    let r, g, b;
+    let r, g, b, alpha;
 
     if (!gif) {
         x = Math.floor(image.shape[0]*x);
@@ -276,6 +325,7 @@ function getBlock(image, x, z, palette=palettes.concrete, gif=false, t=1) {
         r = image.get(x, z, 0);
         g = image.get(x, z, 1);
         b = image.get(x, z, 2);
+        alpha = image.get(x, z, 2);
     } else {
         x = Math.floor(image.shape[1]*x);
         z = Math.floor(image.shape[2]*z);
@@ -283,31 +333,11 @@ function getBlock(image, x, z, palette=palettes.concrete, gif=false, t=1) {
         r = image.get(t, x, z, 0);
         g = image.get(t, x, z, 1);
         b = image.get(t, x, z, 2);
+        alpha = 255;
     }
 
-    let best = palette[0];
-
-    for (i in palette) {
-
-        if (settings.mode === "LAB") {
-            let sourceColor = antiColor.rgb2lab([r, g, b]);
-            let colA = antiColor.rgb2lab(best[settings.color]);
-            let colB = antiColor.rgb2lab(palette[i][settings.color]);
-            let disA = antiColor.deltaE(sourceColor, colA);
-            let disB = antiColor.deltaE(sourceColor, colB);
-            
-            best = disA < disB? best : palette[i];
-        } else if (settings.mode === "RGB") {
-            let colA = best[settings.color];
-            let colB = palette[i][settings.color];
-            let disA = colourDistances.rgb(r, g, b, colA[0], colA[1], colA[2]);
-            let disB = colourDistances.rgb(r, g, b, colB[0], colB[1], colB[2]);
-
-            best = disA < disB? best : palette[i];
-        }
-    }
-
-    return best.block;
+    let block = bot.colors.getBlock([r, g, b, alpha], palette);
+    return block;
 }
 
 async function buildImage(texture, palette, startPosition=bot.entity.position.clone(), size=[64, 64]) {
