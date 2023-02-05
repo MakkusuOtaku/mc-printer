@@ -411,6 +411,328 @@
             "dominant": [127, 127, 127]
         }
     ],
+"zero-gravity": [
+        {
+            "block": "acacia_planks",
+            "average": [168, 90, 50],
+            "dominant": [186, 99, 55]
+        },
+        {
+            "block": "birch_planks",
+            "average": [192, 175, 121],
+            "dominant": [215, 193, 133]
+        },
+        {
+            "block": "crimson_planks",
+            "average": [101, 49, 71],
+            "dominant": [126, 58, 86]
+        },
+        {
+            "block": "dark_oak_planks",
+            "average": [67, 43, 20],
+            "dominant": [79, 50, 24]
+        },
+        {
+            "block": "jungle_planks",
+            "average": [161, 115, 81],
+            "dominant": [184, 135, 100]
+        },
+        {
+            "block": "oak_planks",
+            "average": [162, 131, 79],
+            "dominant": [184, 148, 95]
+        },
+        {
+            "block": "warped_planks",
+            "average": [43, 105, 99],
+            "dominant": [57, 131, 130]
+        },
+        {
+            "block": "white_wool",
+            "average": [234, 236, 237],
+            "dominant": [254, 254, 254]
+        },
+        {
+            "block": "orange_wool",
+            "average": [241, 118, 20],
+            "dominant": [249, 147, 43]
+        },
+        {
+            "block": "magenta_wool",
+            "average": [189, 69, 180],
+            "dominant": [214, 96, 209]
+        },
+        {
+            "block": "light_blue_wool",
+            "average": [58, 175, 217],
+            "dominant": [78, 197, 231]
+        },
+        {
+            "block": "yellow_wool",
+            "average": [249, 198, 40],
+            "dominant": [254, 217, 63]
+        },
+        {
+            "block": "lime_wool",
+            "average": [112, 185, 26],
+            "dominant": [134, 204, 38]
+        },
+        {
+            "block": "pink_wool",
+            "average": [238, 141, 173],
+            "dominant": [244, 178, 201]
+        },
+        {
+            "block": "gray_wool",
+            "average": [63, 68, 72],
+            "dominant": [71, 79, 82]
+        },
+        {
+            "block": "light_gray_wool",
+            "average": [142, 142, 135],
+            "dominant": [153, 153, 147]
+        },
+        {
+            "block": "cyan_wool",
+            "average": [21, 138, 145],
+            "dominant": [22, 150, 152]
+        },
+        {
+            "block": "purple_wool",
+            "average": [122, 42, 173],
+            "dominant": [151, 67, 205]
+        },
+        {
+            "block": "blue_wool",
+            "average": [53, 57, 157],
+            "dominant": [62, 77, 178]
+        },
+        {
+            "block": "brown_wool",
+            "average": [114, 72, 41],
+            "dominant": [126, 80, 47]
+        },
+        {
+            "block": "green_wool",
+            "average": [85, 110, 27],
+            "dominant": [101, 134, 25]
+        },
+        {
+            "block": "red_wool",
+            "average": [161, 39, 35],
+            "dominant": [184, 52, 44]
+        },
+        {
+            "block": "black_wool",
+            "average": [21, 21, 26],
+            "dominant": [28, 28, 32]
+        },
+        {
+            "block": "white_concrete",
+            "average": [207, 213, 214],
+            "dominant": [207, 213, 214]
+        },
+        {
+            "block": "orange_concrete",
+            "average": [224, 97, 1],
+            "dominant": [225, 97, 0]
+        },
+        {
+            "block": "magenta_concrete",
+            "average": [169, 48, 159],
+            "dominant": [169, 48, 159]
+        },
+        {
+            "block": "light_blue_concrete",
+            "average": [36, 137, 199],
+            "dominant": [35, 137, 199]
+        },
+        {
+            "block": "yellow_concrete",
+            "average": [241, 175, 21],
+            "dominant": [241, 175, 21]
+        },
+        {
+            "block": "lime_concrete",
+            "average": [94, 169, 25],
+            "dominant": [94, 169, 24]
+        },
+        {
+            "block": "pink_concrete",
+            "average": [214, 101, 143],
+            "dominant": [214, 101, 143]
+        },
+        {
+            "block": "gray_concrete",
+            "average": [55, 58, 62],
+            "dominant": [55, 58, 62]
+        },
+        {
+            "block": "light_gray_concrete",
+            "average": [125, 125, 115],
+            "dominant": [125, 125, 115]
+        },
+        {
+            "block": "cyan_concrete",
+            "average": [21, 119, 136],
+            "dominant": [21, 119, 136]
+        },
+        {
+            "block": "purple_concrete",
+            "average": [100, 32, 156],
+            "dominant": [101, 32, 157]
+        },
+        {
+            "block": "blue_concrete",
+            "average": [45, 47, 143],
+            "dominant": [44, 46, 143]
+        },
+        {
+            "block": "brown_concrete",
+            "average": [96, 60, 32],
+            "dominant": [97, 60, 32]
+        },
+        {
+            "block": "green_concrete",
+            "average": [73, 91, 36],
+            "dominant": [73, 91, 36]
+        },
+        {
+            "block": "red_concrete",
+            "average": [142, 33, 33],
+            "dominant": [142, 32, 32]
+        },
+        {
+            "block": "black_concrete",
+            "average": [8, 10, 15],
+            "dominant": [9, 11, 16]
+        },
+        {
+            "block": "terracotta",
+            "average": [152, 94, 68],
+            "dominant": [150, 93, 67]
+        },
+        {
+            "block": "white_terracotta",
+            "average": [210, 178, 161],
+            "dominant": [210, 177, 161]
+        },
+        {
+            "block": "orange_terracotta",
+            "average": [162, 84, 38],
+            "dominant": [159, 82, 36]
+        },
+        {
+            "block": "magenta_terracotta",
+            "average": [150, 88, 109],
+            "dominant": [149, 87, 108]
+        },
+        {
+            "block": "light_blue_terracotta",
+            "average": [114, 109, 138],
+            "dominant": [114, 108, 138]
+        },
+        {
+            "block": "yellow_terracotta",
+            "average": [186, 133, 35],
+            "dominant": [184, 131, 34]
+        },
+        {
+            "block": "lime_terracotta",
+            "average": [103, 118, 53],
+            "dominant": [103, 117, 52]
+        },
+        {
+            "block": "pink_terracotta",
+            "average": [162, 78, 79],
+            "dominant": [160, 77, 78]
+        },
+        {
+            "block": "gray_terracotta",
+            "average": [58, 42, 36],
+            "dominant": [58, 43, 36]
+        },
+        {
+            "block": "light_gray_terracotta",
+            "average": [135, 107, 98],
+            "dominant": [135, 107, 98]
+        },
+        {
+            "block": "cyan_terracotta",
+            "average": [87, 91, 91],
+            "dominant": [86, 90, 90]
+        },
+        {
+            "block": "purple_terracotta",
+            "average": [118, 70, 86],
+            "dominant": [115, 68, 84]
+        },
+        {
+            "block": "blue_terracotta",
+            "average": [74, 60, 91],
+            "dominant": [74, 59, 91]
+        },
+        {
+            "block": "brown_terracotta",
+            "average": [77, 51, 36],
+            "dominant": [77, 52, 36]
+        },
+        {
+            "block": "green_terracotta",
+            "average": [76, 83, 42],
+            "dominant": [75, 82, 41]
+        },
+        {
+            "block": "red_terracotta",
+            "average": [143, 61, 47],
+            "dominant": [141, 59, 46]
+        },
+        {
+            "block": "black_terracotta",
+            "average": [37, 23, 16],
+            "dominant": [37, 22, 16]
+        },
+        {
+            "block": "lapis_block",
+            "average": [31, 67, 140],
+            "dominant": [30, 66, 133]
+        },
+        {
+            "block": "brown_mushroom_block",
+            "average": [149, 112, 81],
+            "dominant": [151, 114, 81]
+        },
+        {
+            "block": "clay",
+            "average": [161, 167, 179],
+            "dominant": [161, 167, 177]
+        },
+        {
+            "block": "coal_block",
+            "average": [16, 16, 16],
+            "dominant": [21, 21, 21]
+        },
+        {
+            "block": "diorite",
+            "average": [189, 189, 190],
+            "dominant": [233, 233, 233]
+        },
+        {
+            "block": "granite",
+            "average": [149, 103, 86],
+            "dominant": [159, 107, 88]
+        },
+        {
+            "block": "obsidian",
+            "average": [15, 11, 25],
+            "dominant": [6, 3, 11]
+        },
+        {
+            "block": "stone",
+            "average": [126, 126, 126],
+            "dominant": [127, 127, 127]
+        }
+    ],
     "all": [
         {"block": "white_wool", "colour": [234, 236, 237]},
         {"block": "orange_wool", "colour": [241, 118, 20]},
